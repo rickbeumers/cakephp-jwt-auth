@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace ADmad\JwtAuth\Auth;
@@ -12,6 +13,7 @@ use Cake\Http\ServerRequest;
 use Cake\Utility\Security;
 use Exception;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 /**
  * An authentication adapter for authenticating using JSON Web Tokens.
@@ -230,8 +232,7 @@ class JwtAuthenticate extends BaseAuthenticate
         try {
             $payload = JWT::decode(
                 $token,
-                $config['key'] ?: Security::getSalt(),
-                $config['allowedAlgs']
+                new Key($config['key'] ?: Security::getSalt(), $config['allowedAlgs'][0])
             );
 
             return $payload;
