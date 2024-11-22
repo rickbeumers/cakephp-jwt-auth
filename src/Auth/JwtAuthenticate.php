@@ -13,7 +13,6 @@ use Cake\Http\ServerRequest;
 use Cake\Utility\Security;
 use Exception;
 use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
 /**
  * An authentication adapter for authenticating using JSON Web Tokens.
@@ -232,7 +231,8 @@ class JwtAuthenticate extends BaseAuthenticate
         try {
             $payload = JWT::decode(
                 $token,
-                new Key($config['key'] ?: Security::getSalt(), $config['allowedAlgs'][0])
+                $config['key'] ?: Security::getSalt(),
+                $config['allowedAlgs']
             );
 
             return $payload;
